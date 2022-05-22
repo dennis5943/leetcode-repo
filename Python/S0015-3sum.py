@@ -26,15 +26,17 @@ class Solution(object):
             return []
         nums.sort()
         res = set()
-        for i, v in enumerate(nums[:-2]):
-            if i >= 1 and v == nums[i-1]:
+        #print(nums,nums[:-2])
+        #(a,b,c)
+        for a_idx, a in enumerate(nums[:-2]):
+            if a_idx >= 1 and a == nums[a_idx-1]:
                 continue
-            d = {}
-            for x in nums[i+1:]:
-                if x not in d:
-                    d[-v-x] = 1
+            b_set = {}
+            for c in nums[a_idx+1:]:
+                if c not in b_set:
+                    b_set[-a-c] = 1
                 else:
-                    res.add((v, -v-x, x))
+                    res.add((a, -a-c, c))
         return list(res)
 
 
