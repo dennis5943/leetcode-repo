@@ -24,9 +24,8 @@ class Solution:
 
         start = 0
         max_len = 1
-        is_palindromic = []
-        for i in range(len(s)):
-            is_palindromic.append([False] * len(s))
+        is_palindromic = [[False]* len(s) for _ in range(len(s))]
+       
         for i in range(len(s)):
             j = i
             while j >= 0:
