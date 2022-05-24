@@ -44,4 +44,5 @@ if __name__ == '__main__':
     assert Solution().reverse(123654) == 456321
     assert Solution().reverse(-123654) == -456321
     assert Solution().reverse(1534236469) == 0
+    print('finished')
 
