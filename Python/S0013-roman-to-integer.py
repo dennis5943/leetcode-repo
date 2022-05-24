@@ -19,9 +19,9 @@ However, the numeral for four is not IIII. Instead, the number four is written a
 Because the one is before the five we subtract it making four. The same principle applies to
 the number nine, which is written as IX. There are six instances where subtraction is used:
 
-	I can be placed before V (5) and X (10) to make 4 and 9. 
-	X can be placed before L (50) and C (100) to make 40 and 90. 
-	C can be placed before D (500) and M (1000) to make 400 and 900.
+	I can be placed before V (5) and X (10) to make 4 and 9.         ([I]*)[VX]
+	X can be placed before L (50) and C (100) to make 40 and 90.     ([X]*)[LC]
+	C can be placed before D (500) and M (1000) to make 400 and 900. ([C]*)[DM]
 
 Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
 
@@ -47,26 +47,35 @@ Input: "MCMXCIV"
 Output: 1994
 Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 """
+
+import re
 class Solution:
     def romanToInt(self, s: str) -> int:
-        nums = {
-            'M': 1000,
-            'D': 500,
-            'C': 100,
-            'L': 50,
-            'X': 10,
-            'V': 5,
-            'I': 1,
-        }
-        prev = 0
-        result = 0
-        for ch in s[::-1]:
-            if nums[ch] < prev:
-                result -= nums[ch]
-            else:
-                result += nums[ch]
-            prev = nums[ch]
-        return result
+        total = 0
+    
+        for m in re.findall("[C]*[DM]{1}",s):
+            l = len(m)
+            total -= (100 * (l - 1))
+            total += 500 if "D" == m[-1] else 1000
+        
+        s = re.sub("[C]*[DM]{1}",'',s)
+
+        for m in re.findall("[X]*[LC]{1}",s):
+            l = len(m)
+            total -= (10 * (l - 1))
+            total += 50 if "L" == m[-1] else 100
+
+        s = re.sub("[X]*[LC]{1}",'',s)
+        for m in re.findall("[I]*[VX]",s):
+            l = len(m)
+            total -= (l - 1)
+            total += 5 if "V" == m[-1] else 10
+
+        s = re.sub("[I]*[VX]",'',s)
+        
+        total += len(s)
+        
+        return total
 
 
 if __name__ == '__main__':
