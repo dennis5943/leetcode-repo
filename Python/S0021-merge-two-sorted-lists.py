@@ -15,25 +15,43 @@ class ListNode:
         self.next = next
 
 from typing import List
-def from_list(vals: List[int]) -> ListNode:
-    current = None
-    for x in vals[::-1]:
-        current = ListNode(x, current)
-    return current
-
-def to_list(list_node: ListNode) -> List[int]:
-    vals = []
-    while list_node is not None:
-        vals.append(list_node.val)
-        list_node = list_node.next
-    return vals
-
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        
-        pass
+        dummyhead = ListNode()
+
+        def choose(head,l1,l2):
+            if l1 == None or l2 == None:
+                head.next = l1 if l1 else l2
+                return
+            
+            if l1.val <= l2.val:
+                head.next = ListNode(l1.val)
+                choose(head.next,l1.next,l2)
+            else:
+                head.next = ListNode(l2.val)
+                choose(head.next,l1,l2.next)
+
+        choose(dummyhead,l1,l2)
+        return dummyhead.next
 
 
 if __name__ == '__main__':
-    assert Solution().mergeTwoLists(0) == 0
+    def array2list(nums):
+        dummyhead = ListNode(0,None)
+
+        ptr=dummyhead
+        for n in nums:
+            ptr.next = ListNode(n,None)
+            ptr = ptr.next
+        return dummyhead.next
+
+    def lst2array(head):
+        lst=[]
+        n = head
+        while n:
+            lst.append(n.val)
+            n = n.next
+        return lst
+
+    assert lst2array(Solution().mergeTwoLists(array2list([1,2,4]), array2list([1,3,4]))) == [1,1,2,3,4,4]
 
