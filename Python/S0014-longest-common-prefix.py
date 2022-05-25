@@ -21,34 +21,20 @@ class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
         if len(strs) == 0:
             return ""
-        if len(strs) == 1:
+        elif len(strs) == 1:
             return strs[0]
 
-        i, j = 0, 0
-        while i < len(strs[0]) and j < len(strs[1]):
-            if strs[0][i] == strs[1][j]:
-                i += 1
-                j += 1
-            else:
+        prefix = ""
+        minlen = min(len(str) for str in strs)
+        for i in range(minlen):
+            if any(str for str in strs if strs[0][i] != str[i]):
                 break
-        lcp = strs[0][:i]
+            else:
+                prefix = prefix + strs[0][i]
+            
 
-        if i == 0 and j == 0:
-            return ""
 
-        if len(strs) == 2:
-            return lcp
-
-        for k in range(2, len(strs)):
-            i, j = 0, 0
-            while i < len(lcp) and j < len(strs[k]):
-                if lcp[i] == strs[k][j]:
-                    i += 1
-                    j += 1
-                else:
-                    lcp = lcp[:i]
-                    break
-        return lcp[:i]
+        return prefix
 
 if __name__ == '__main__':
     assert Solution().longestCommonPrefix(["flower", "flow", "flight"]) == "fl"
