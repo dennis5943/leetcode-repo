@@ -21,25 +21,50 @@ class ListNode:
         self.next = next
 
 from typing import List
-def from_list(vals: List[int]) -> ListNode:
-    current = None
-    for x in vals[::-1]:
-        current = ListNode(x, current)
-    return current
-
-def to_list(list_node: ListNode) -> List[int]:
-    vals = []
-    while list_node is not None:
-        vals.append(list_node.val)
-        list_node = list_node.next
-    return vals
-
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        def count(head):
+            if head:
+                return 1 + count(head.next)
+            else:
+                return 0
+
+        cnt = count(head)
+        if cnt == n:
+            return head.next
+            
+        tmpnode = head
+        for i in range(cnt - n - 1):
+            tmpnode = tmpnode.next
         
-        pass
+        if tmpnode.next:
+            tmpnode.next = tmpnode.next.next
+            return head
+        else:
+            return None
 
 
 if __name__ == '__main__':
-    assert Solution().removeNthFromEnd(0) == 0
+
+    def array2list(nums):
+        dummyhead = ListNode(0,None)
+
+        ptr=dummyhead
+        for n in nums:
+            ptr.next = ListNode(n,None)
+            ptr = ptr.next
+        return dummyhead.next
+
+    def lst2array(head):
+        lst=[]
+        n = head
+        while n:
+            lst.append(n.val)
+            n = n.next
+        return lst
+
+    assert lst2array(Solution().removeNthFromEnd(array2list([1,2]), 2)) == [2]
+    assert lst2array(Solution().removeNthFromEnd(array2list([1,2]), 1)) == [1]
+    assert lst2array(Solution().removeNthFromEnd(array2list([1]), 1)) == []
+    assert lst2array(Solution().removeNthFromEnd(array2list([1,2,3,4,5]), 2)) == [1,2,3,5]
 

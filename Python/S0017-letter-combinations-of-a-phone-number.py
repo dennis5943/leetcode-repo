@@ -25,27 +25,16 @@ class Solution:
         digit_mapping = {"0": " ", "1": "", "2": "abc", "3": "def", "4": "ghi",
                          "5": "jkl", "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"}
 
+        #"23") == ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
         res: List[str] = []
-        def dfs(idx: int, path: str):
-            if len(path) == len(digits):
-                res.append(path)
-                return
-            for i in range(idx, len(digits)):
-                for j in digit_mapping[digits[idx]]:
-                    dfs(i+1, path+j)
+        def dfs(idx: int, tmpstr: str):
+            if len(tmpstr) == len(digits):
+                res.append(tmpstr)
+            else:
+                for c in digit_mapping[digits[idx]]:
+                    dfs(idx +1,tmpstr + c)
         dfs(0, "")
         return res
-
-        ## non-recursive solution
-        # ans = [""]
-        # for digit in digits:
-        #     tmp = []
-        #     for temp in ans:
-        #         s = digit_mapping[digit]
-        #         for i in s:
-        #             tmp.append(temp + i)
-        #     ans = tmp
-        # return ans
 
 if __name__ == '__main__':
     assert Solution().letterCombinations("") == []
