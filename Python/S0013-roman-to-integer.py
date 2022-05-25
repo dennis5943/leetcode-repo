@@ -47,36 +47,25 @@ Input: "MCMXCIV"
 Output: 1994
 Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 """
-
 import re
 class Solution:
     def romanToInt(self, s: str) -> int:
         total = 0
     
-        for m in re.findall("[C]*[DM]{1}",s):
-            l = len(m)
-            total -= (100 * (l - 1))
-            total += 500 if "D" == m[-1] else 1000
-        
+        for m in re.findall("[C]*[DM]{1}",s):                        
+            total += (500 if "D" == m[-1] else 1000) - (100 * (len(m) - 1))        
         s = re.sub("[C]*[DM]{1}",'',s)
 
-        for m in re.findall("[X]*[LC]{1}",s):
-            l = len(m)
-            total -= (10 * (l - 1))
-            total += 50 if "L" == m[-1] else 100
-
+        for m in re.findall("[X]*[LC]{1}",s):                        
+            total += (50 if "L" == m[-1] else 100) - (10 * (len(m) - 1))
         s = re.sub("[X]*[LC]{1}",'',s)
-        for m in re.findall("[I]*[VX]",s):
-            l = len(m)
-            total -= (l - 1)
-            total += 5 if "V" == m[-1] else 10
 
-        s = re.sub("[I]*[VX]",'',s)
-        
+        for m in re.findall("[I]*[VX]",s):                        
+            total += (5 if "V" == m[-1] else 10) - (len(m) - 1)
+        s = re.sub("[I]*[VX]",'',s)        
         total += len(s)
         
         return total
-
 
 if __name__ == '__main__':
     assert Solution().romanToInt("I") == 1
