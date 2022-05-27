@@ -26,24 +26,16 @@ class Solution:
             return 0
         if len(haystack) < len(needle):
             return -1
-        # build the KMP table
-        lps = [0] * len(needle)
-        for i in range(1, len(needle)):
-            lps[i] = lps[i-1]
-            while lps[i] > 0 and needle[lps[i]] != needle[i]:
-                lps[i] = lps[lps[i] - 1]
-            if needle[lps[i]] == needle[i]:
-                lps[i] += 1
+            
+        needleLen = len(needle)
+        haystackLen = len(haystack)
 
-        # do the matching
-        pre = 0
-        for j in range(len(haystack)):
-            while pre > 0 and needle[pre] != haystack[j]:
-                pre = lps[pre - 1]
-            if needle[pre] == haystack[j]:
-                pre += 1
-            if pre == len(needle):
-                return j - pre + 1
+        for i in range(haystackLen):
+            if haystack[i] == needle[0] and (i + needleLen - 1) < haystackLen and haystack[i + needleLen - 1] == needle[-1]:
+                substr = haystack[i:i + needleLen]
+                if substr == needle:
+                    return i
+
         return -1
 
 if __name__ == '__main__':
