@@ -24,10 +24,18 @@ Note:
 """
 class Solution:
     def divide(self, dividend: int, divisor: int) -> int:
-        
-        pass
+        if dividend * divisor < 0:
+            ans = int((abs(dividend) - abs(dividend) % abs(divisor)) / abs(divisor) * -1)
+        else:
+            ans = int((abs(dividend) - abs(dividend) % abs(divisor)) / abs(divisor))
 
+        ans = max(ans, (-2)**31)
+        ans = min(ans, (2)**31 -1)
+        return ans
 
 if __name__ == '__main__':
-    assert Solution().divide(0) == 0
+
+    assert Solution().divide(-2147483648,-1) == 2147483647
+    assert Solution().divide(10,3) == 3
+    assert Solution().divide(7,-3) == -2
 
