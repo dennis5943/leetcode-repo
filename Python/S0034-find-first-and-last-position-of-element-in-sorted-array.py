@@ -23,24 +23,41 @@ Constraints:
 from typing import List
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
-        def binarySearch(compare):
-            low, high = 0, len(nums) - 1
-            while low <= high:
-                mid = (low + high) // 2
-                if compare(nums[mid], target):
-                    high = mid - 1
-                else:
-                    low = mid + 1
-            return low
+        def binarySearch(start,end):
+            if end == start:
+                return start if nums[start] == target else -1
+            mid = int( (end + start) / 2 )
+            midval = nums[mid]
+            
+            if midval == target:
+                return mid
+            elif midval > target:
+                return binarySearch(start,max(start,mid - 1))
+            else:
+                return binarySearch(min(end,mid + 1) , end)
 
-        lb = binarySearch(lambda x, y: x >= y)
+        if not any(nums):
+            return [-1, -1]
+
+        lb = binarySearch(0,len(nums) -1 )
         if lb >= len(nums) or nums[lb] != target:
             return [-1, -1]
-        rb = binarySearch(lambda x, y: x > y)
-        return [lb, rb-1]
+
+        rang = [lb,lb]
+        while 0 < rang[0] or rang[1] < len(nums) -1:
+            if rang[0] -1 >= 0 and nums[lb] == nums[rang[0] -1]:
+                rang[0] -= 1
+            elif rang[1] + 1 < len(nums) and nums[lb] == nums[rang[1] + 1]:
+                rang[1] += 1
+            else:
+                break
+        return rang
 
 
 if __name__ == '__main__':
+    assert Solution().searchRange([2,2], 2) == [0, 1]
+    assert Solution().searchRange([], 0) == [-1, -1]
+    
     assert Solution().searchRange([5, 7, 7, 8, 8, 10], 8) == [3, 4]
     assert Solution().searchRange([5, 7, 7, 8, 8, 10], 6) == [-1, -1]
     assert Solution().searchRange([5, 7, 7, 8, 8, 10], 5) == [0, 0]

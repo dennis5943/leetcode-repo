@@ -29,8 +29,6 @@ Constraints:
 from typing import List
 class Solution:
 	def search(self, nums: List[int], target: int) -> int:
-		if len(nums) == 1:
-			return 0 if nums[0] == target else -1
 		k=0
 		
 		for i in range(len(nums) - 1):
