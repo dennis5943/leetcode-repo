@@ -34,24 +34,25 @@ class Solution:
         out = "1"
         if n == 1:
             return out
-        for i in range(2, n+1):
-            cur = out[0]
+        for i in range(2,n+1):
+            preout = out
+            out = ''
             count = 0
-            pre = out
-            out = ""
-            for j in range(len(pre)):
-                if pre[j] == cur:
+            cur = preout[0]
+            for j in range(len(preout)):
+                if preout[j] == cur:
                     count += 1
                 else:
-                    out += f"{count}{cur}"
+                    out = out + f"{count}{cur}"
+                    cur = preout[j]
                     count = 1
-                    cur = pre[j]
-            out += f"{count}{cur}"
+            out = out + f"{count}{cur}"
         return out
 
 if __name__ == '__main__':
-    assert Solution().countAndSay(1) == "1"
+    
     assert Solution().countAndSay(2) == "11"
+    assert Solution().countAndSay(1) == "1"
     assert Solution().countAndSay(3) == "21"
     assert Solution().countAndSay(4) == "1211"
     assert Solution().countAndSay(5) == "111221"
