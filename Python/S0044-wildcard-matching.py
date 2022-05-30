@@ -53,5 +53,9 @@ class Solution:
 
 
 if __name__ == '__main__':
-    assert Solution().isMatch(0) == 0
+    assert Solution().isMatch('aa','a') == False
+    assert Solution().isMatch('aa','*') == True
+    assert Solution().isMatch('aa','a') == True
+    assert Solution().isMatch('aa','a') == True
+    assert Solution().isMatch('aa','a') == True
 
