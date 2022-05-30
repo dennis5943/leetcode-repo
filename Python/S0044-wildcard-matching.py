@@ -54,7 +54,7 @@ class Solution:
             elif sl > sr:
                 return pl > pr
 
-            if p[pl] in ['?',s[sl]]:
+            if p[pl] in ['?', s[sl]]:
                 return trymatch(pl + 1,pr,sl + 1,sr)
             elif p[pr] in ['?',s[sr]]:
                 return trymatch(pl,pr - 1,sl, sr -1)
@@ -67,12 +67,12 @@ class Solution:
         pright = len(p) - 1
 
         sleft = 0
-        sright = len(s) - 1
+        sright = max(0,len(s) - 1)
 
         return trymatch(pleft,pright,sleft,sright)
 
 if __name__ == '__main__':
-    assert Solution().isMatch('','"******"') == True
+    assert Solution().isMatch('','******') == True
     assert Solution().isMatch('ab','?*') == True
     assert Solution().isMatch('aa','a') == False
     assert Solution().isMatch('aa','*') == True
