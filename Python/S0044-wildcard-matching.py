@@ -48,14 +48,35 @@ Output: false
 """
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        
-        pass
+        def trymatch(pl, pr,sl,sr):
+            if pl > pr:
+                return sl > sr
+            elif sl > sr:
+                return pl > pr
 
+            if p[pl] in ['?',s[sl]]:
+                return trymatch(pl + 1,pr,sl + 1,sr)
+            elif p[pr] in ['?',s[sr]]:
+                return trymatch(pl,pr - 1,sl, sr -1)
+            elif p[pl] == '*' and p[pr] == '*':
+                return trymatch(pl + 1,pr,sl + 1,sr) or trymatch(pl,pr,sl + 1,sr) or trymatch(pl + 1,pr,sl ,sr)
+            else:
+                return False
+
+        pleft = 0
+        pright = len(p) - 1
+
+        sleft = 0
+        sright = len(s) - 1
+
+        return trymatch(pleft,pright,sleft,sright)
 
 if __name__ == '__main__':
+    assert Solution().isMatch('','"******"') == True
+    assert Solution().isMatch('ab','?*') == True
     assert Solution().isMatch('aa','a') == False
     assert Solution().isMatch('aa','*') == True
-    assert Solution().isMatch('aa','a') == True
-    assert Solution().isMatch('aa','a') == True
-    assert Solution().isMatch('aa','a') == True
+    assert Solution().isMatch('cb','?a') == False
+    assert Solution().isMatch('adceb','*a*b') == True
+    assert Solution().isMatch('acdcb','a*c?b') == False
 
