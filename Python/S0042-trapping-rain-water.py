@@ -12,10 +12,27 @@ Output: 6
 from typing import List
 class Solution:
     def trap(self, height: List[int]) -> int:
+        n= len(height)
+        ptrl= 0
+        ptrr= n-1
+        water= 0
+        maxLeft= height[ptrl]
+        maxRight= height[ptrr]
         
-        pass
+        while ptrl < ptrr:
+            
+            if height[ptrl]<= height[ptrr]:
+                ptrl+=1
+                maxLeft= max(maxLeft, height[ptrl])
+                water+= (maxLeft- height[ptrl])
+            else:
+                ptrr-=1
+                maxRight= max(maxRight, height[ptrr])
+                water+= (maxRight- height[ptrr])
+        return water
 
 
 if __name__ == '__main__':
-    assert Solution().trap(0) == 0
+    assert Solution().trap([0,1,0,2,1,0,1,3,2,1,2,1]) == 6
+    assert Solution().trap([4,2,0,3,2,5]) == 9
 
