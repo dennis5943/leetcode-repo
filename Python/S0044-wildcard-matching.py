@@ -55,10 +55,8 @@ class Solution:
         plist = list(filter(lambda x:any(x), p.split("*")))
 
         def valid(ptn,sstart):
-            if sstart + len(ptn) -1 <= send:
-                return all(ptn[i] in [s[i + sstart],'?'] for i in range(len(ptn)))
-            else:
-                return False
+            return sstart + len(ptn) -1 <= send \
+                and all(ptn[i] in [s[i + sstart],'?'] for i in range(len(ptn)))
 
         sstart = 0
         send = len(s) - 1
@@ -96,7 +94,7 @@ class Solution:
         return True
 
 if __name__ == '__main__':
-    #assert Solution().isMatch('bbbbab','*a?*b') == False
+    assert Solution().isMatch('bbbbab','*a?*b') == False
     assert Solution().isMatch('c','*?*') == True
     assert Solution().isMatch('b','?*?') == False
     assert Solution().isMatch('mississippi','m??*ss*?i*pi') == False
