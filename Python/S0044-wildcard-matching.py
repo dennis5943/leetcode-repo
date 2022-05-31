@@ -44,22 +44,32 @@ s = "acdcb"
 p = "a*c?b"
 Output: false
 
+1 2 3 4 5 6 7 8
+3~6
+range(3,)
 
 """
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
         def trymatch(pl, pr,sl,sr):
-            if pl > pr:
+            if any(p) and pr >= pl and all('*'== p[i] for i in range(pl,pr + 1)):
+                return True            
+            elif pl > pr:
                 return sl > sr
-            elif sl > sr:
+            elif sl > sr or s == '':
                 return pl > pr
 
+            tmpptn = p[pl:pr+1]
+            ssl = s[sl]
+            ssr = s[sr]
             if p[pl] in ['?', s[sl]]:
                 return trymatch(pl + 1,pr,sl + 1,sr)
             elif p[pr] in ['?',s[sr]]:
                 return trymatch(pl,pr - 1,sl, sr -1)
             elif p[pl] == '*' and p[pr] == '*':
-                return trymatch(pl + 1,pr,sl + 1,sr) or trymatch(pl,pr,sl + 1,sr) or trymatch(pl + 1,pr,sl ,sr)
+                return trymatch(pl + 1,pr,sl + 1,sr) or trymatch(pl,pr-1,sl ,sr) \
+                    or trymatch(pl + 1,pr,sl ,sr) or trymatch(pl,pr - 1,sl ,sr) \
+                    or trymatch(pl,pr,sl + 1,sr) or trymatch(pl,pr,sl ,sr - 1)
             else:
                 return False
 
@@ -67,11 +77,17 @@ class Solution:
         pright = len(p) - 1
 
         sleft = 0
-        sright = max(0,len(s) - 1)
+        sright = len(s) - 1
 
         return trymatch(pleft,pright,sleft,sright)
 
 if __name__ == '__main__':
+    assert Solution().isMatch('babaaababaabababbbbbbaabaabbabababbaababbaaabbbaaab','***bba**a*bbba**aab**b') == True
+    assert Solution().isMatch('','') == True
+    assert Solution().isMatch('a','a*') == True
+    assert Solution().isMatch('a','') == False
+    assert Solution().isMatch('','a') == False
+    assert Solution().isMatch('abcabczzzde','*abc???de*') == True
     assert Solution().isMatch('','******') == True
     assert Solution().isMatch('ab','?*') == True
     assert Solution().isMatch('aa','a') == False
