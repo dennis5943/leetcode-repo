@@ -51,37 +51,56 @@ range(3,)
 """
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        def trymatch(pl, pr,sl,sr):
-            if any(p) and pr >= pl and all('*'== p[i] for i in range(pl,pr + 1)):
-                return True            
-            elif pl > pr:
-                return sl > sr
-            elif sl > sr or s == '':
-                return pl > pr
 
-            tmpptn = p[pl:pr+1]
-            ssl = s[sl]
-            ssr = s[sr]
-            if p[pl] in ['?', s[sl]]:
-                return trymatch(pl + 1,pr,sl + 1,sr)
-            elif p[pr] in ['?',s[sr]]:
-                return trymatch(pl,pr - 1,sl, sr -1)
-            elif p[pl] == '*' and p[pr] == '*':
-                return trymatch(pl + 1,pr,sl + 1,sr) or trymatch(pl,pr-1,sl ,sr) \
-                    or trymatch(pl + 1,pr,sl ,sr) or trymatch(pl,pr - 1,sl ,sr) \
-                    or trymatch(pl,pr,sl + 1,sr) or trymatch(pl,pr,sl ,sr - 1)
+        plist = list(filter(lambda x:any(x), p.split("*")))
+
+        def valid(ptn,sstart):
+            if sstart + len(ptn) - 1 < len(s):
+                return all(ptn[i] in [s[i + sstart],'?'] for i in range(len(ptn)))
             else:
                 return False
 
-        pleft = 0
-        pright = len(p) - 1
+        sstart = 0
+        send = len(s) - 1
+        if all(pp == '*' for pp in p):
+            return True if any(p) else s == ''
 
-        sleft = 0
-        sright = len(s) - 1
+        if p[0] != '*':
+            if valid(plist[0],0):
+                sstart = len(plist[0])
+                del plist[0]
+            else:
+                return False                
+        if p[-1] != '*':
+            if not any(plist):
+                return sstart > send
+            elif any(plist) and valid(plist[-1], max(sstart,len(s) - len(plist[-1]))):
+                send -= len(plist[-1])
+                del plist[-1]
+            else:
+                return False
+        
+        while any(plist):
+            ptn = plist[0]
+            del plist[0]
+            isValid = False
+            for i in range(sstart,send +1):
+                remainStr = s[sstart:send + 1]
+                if valid(ptn,i):
+                    isValid = True
+                    sstart = i + len(ptn)
+                    break
+            
+            if not isValid:
+                return False
 
-        return trymatch(pleft,pright,sleft,sright)
+        return True
 
 if __name__ == '__main__':
+    #assert Solution().isMatch('bbbbab','*a?*b') == False
+    assert Solution().isMatch('c','*?*') == True
+    assert Solution().isMatch('b','?*?') == False
+    assert Solution().isMatch('mississippi','m??*ss*?i*pi') == False
     assert Solution().isMatch('babaaababaabababbbbbbaabaabbabababbaababbaaabbbaaab','***bba**a*bbba**aab**b') == True
     assert Solution().isMatch('','') == True
     assert Solution().isMatch('a','a*') == True
