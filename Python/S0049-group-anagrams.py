@@ -18,12 +18,18 @@ Note:
 
 """
 from typing import List
+from collections import Counter
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        
-        pass
-
-
+        dictu = {}
+        for i in strs:
+            if ''.join(sorted(i)) not in dictu:
+                dictu[''.join(sorted(i))] = [i]
+            else:
+                dictu[''.join(sorted(i))].append(i)
+        return dictu.values()
+      
 if __name__ == '__main__':
-    assert Solution().groupAnagrams(0) == 0
-
+    assert Solution().groupAnagrams(["eat","tea","tan","ate","nat","bat"]) == [['eat', 'tea', 'ate'],['tan', 'nat'],['bat']]
+    assert Solution().groupAnagrams([""]) == [[""]]
+    assert Solution().groupAnagrams(["a"]) == [["a"]]
