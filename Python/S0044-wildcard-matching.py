@@ -55,8 +55,6 @@ class Solution:
         plist = list(filter(lambda x:any(x), p.split("*")))
 
         def valid(ptn,sstart):
-            #if sstart + len(ptn) -1 > send:
-            #    return False
             if sstart + len(ptn) -1 <= send:
                 return all(ptn[i] in [s[i + sstart],'?'] for i in range(len(ptn)))
             else:
@@ -67,13 +65,13 @@ class Solution:
         if all(pp == '*' for pp in p):
             return True if any(p) else s == ''
 
-        if p[0] != '*':
+        if p[0] != '*':  #if left pattern char is not * , need to match the first ptn
             if valid(plist[0],0):
                 sstart = len(plist[0])
                 del plist[0]
             else:
                 return False                
-        if p[-1] != '*':
+        if p[-1] != '*': #if right pattern char is not * , need to match the last ptn
             if not any(plist):
                 return sstart > send
             elif any(plist) and valid(plist[-1], max(sstart,len(s) - len(plist[-1]))):
@@ -87,7 +85,6 @@ class Solution:
             del plist[0]
             isValid = False
             for i in range(sstart,send +1):
-                remainStr = s[sstart:send + 1]
                 if valid(ptn,i):
                     isValid = True
                     sstart = i + len(ptn)
