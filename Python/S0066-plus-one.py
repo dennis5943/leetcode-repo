@@ -20,18 +20,18 @@ Example 2:
 from typing import List
 class Solution:
     def plusOne(self, digits: List[int]) -> List[int]:
-        carry = True
-        for i in range(len(digits)-1, -1, -1):
-            if carry:
-                digits[i] += 1
-                carry = False
-            if digits[i] > 9:
-                digits[i] -= 10
-                carry = True
+        def dfs(idx, add):
+            if idx < 0:
+                digits.insert(0,add)
+                return
             else:
-                break
-        if carry:
-            digits.insert(0, 1)
+                digits[idx] += add
+
+            if digits[idx] > 9:
+                digits[idx] = 0
+                dfs(idx - 1, 1)
+
+        dfs(len(digits) - 1, 1)
         return digits
 
 if __name__ == '__main__':
