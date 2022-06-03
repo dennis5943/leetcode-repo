@@ -22,10 +22,28 @@ Constraints:
 from typing import List
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        isInclude = lambda v,b: b[0] <= v and v <= b[1]
+        intervals.sort(key=lambda x: x[0])
+        tmpBound = None
+        res = []
         
-        pass
+        for interval in intervals:
+            if not tmpBound:
+                tmpBound = [interval[0],interval[1]]
+            elif isInclude(interval[0],tmpBound):
+                tmpBound[1] = max(interval[1] , tmpBound[1])
+            else:
+                res.append(tmpBound)
+                tmpBound = interval
+
+        if tmpBound:
+            res.append(tmpBound)
+        return res
 
 
 if __name__ == '__main__':
-    assert Solution().merge(0) == 0
+    assert Solution().merge([[1,3],[2,6],[8,10],[15,18]]) == [[1,6],[8,10],[15,18]]
+    assert Solution().merge([[1,4],[4,5]]) == [[1,5]]
+    assert Solution().merge([[1,3],[2,6],[8,10],[15,18]]) == [[1,6],[8,10],[15,18]]
+    assert Solution().merge([[1,3],[2,6],[8,10],[15,18]]) == [[1,6],[8,10],[15,18]]
 

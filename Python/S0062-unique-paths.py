@@ -30,10 +30,20 @@ Constraints:
 """
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
+        #(m - 1 + n - 1)! / (m -1)!* (n-1)! = (m -1 + n - 1)* ....m / (n-1)!  
+        if m < n :
+            m,n = n,m
+
+        res = 1
+        for mm in range(m+n-2,m-1,-1):
+            res *= mm
         
-        pass
+        for mm in range(1, n):
+            res /= mm
+        return int(res)
 
 
 if __name__ == '__main__':
-    assert Solution().uniquePaths(0) == 0
+    assert Solution().uniquePaths(3,7) == 28
+    assert Solution().uniquePaths(3,2) == 3
 

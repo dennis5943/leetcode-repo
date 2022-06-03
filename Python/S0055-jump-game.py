@@ -26,10 +26,19 @@ Constraints:
 from typing import List
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        
-        pass
+        maxdis = nums[0]
+        for idx in range(0,len(nums)):
+            if idx > maxdis:
+                return False
+            maxdis = max(maxdis,idx + nums[idx])
+
+            if maxdis >= len(nums) -1:
+                return True
+        return False
 
 
 if __name__ == '__main__':
-    assert Solution().canJump(0) == 0
+    assert Solution().canJump([0]) == True
+    assert Solution().canJump([2,3,1,1,4]) == True
+    assert Solution().canJump([3,2,1,0,4]) == False
 
