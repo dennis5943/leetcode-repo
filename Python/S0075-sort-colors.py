@@ -18,15 +18,25 @@ Follow up:
 
 """
 from typing import List
+from collections import Counter
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
         """
         Do not return anything, modify nums in-place instead.
         """
-        
+        counter = Counter(nums)
+        for i in range(counter[0]):
+            nums[i] = 0
+
+        for i in range(counter[0] , counter[0] + counter[1]):
+            nums[i] = 1
+
+        for i in range(counter[0] + counter[1] , len(nums)):
+            nums[i] = 2
         pass
 
 
 if __name__ == '__main__':
-    assert Solution().sortColors(0) == 0
+    assert Solution().sortColors([2,0,2,1,1,0]) == [0,0,1,1,2,2]
+    assert Solution().sortColors([2,0,1]) == [0,1,2]
 
