@@ -19,10 +19,23 @@ Explanation: The square root of 8 is 2.82842..., and since
 """
 class Solution:
     def mySqrt(self, x: int) -> int:
+        #binary search the value n that n **2 <= x and x < (n+1)**2
+        def binSearch(l:int, r:int):
+            mid = int( (r + l) / 2 )
+            if mid ** 2 <= x and (mid +1)**2 > x:
+                return mid
+
+            if mid ** 2 >= x:
+                return binSearch(l,mid)
+            else:
+                return binSearch(mid + 1,r)
         
-        pass
+        return int(binSearch(0,x))
 
 
 if __name__ == '__main__':
-    assert Solution().mySqrt(0) == 0
+    assert Solution().mySqrt(26) == 5
+    assert Solution().mySqrt(15) == 3
+    assert Solution().mySqrt(8) == 2
+    
 
