@@ -45,10 +45,7 @@ class Solution:
                 if bound2len([t_loc_l,t_loc_r]) < bound2len(t_minbound):
                     t_minbound = [t_loc_l,t_loc_r]
             else:
-                #t_loc_r = min(t_loc_r , len(t_ch) - 1)
-                while t_loc_r > max(t_loc_l,t_minbound[1]):
-                    tmpMap[t_ch[t_loc_r]] -= 1
-                    t_loc_r -= 1
+                break
             tmpMap[t_ch[t_loc_l]] -= 1
             t_loc_l += 1
         return s[t_loc[t_minbound[0]]:t_loc[t_minbound[1]] + 1]
