@@ -26,42 +26,64 @@ Constraints:
 	1 <= word.length <= 10^3
 """
 from typing import List
+from copy import deepcopy
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         # dfs
-        def dfs(row: int, col: int, word: str, idx: int):
-            # no character to find
-            if idx == len(word):
+        def dfs(row: int, col: int, widx: int):
+            # no character to find            
+            if widx >= len(word): # check widx in bound of word
                 return True
-            # ends search
-            if row < 0 or row == len(board) or col < 0 or col == len(board[0]):
+            elif row < 0 or row >= len(board) or col < 0 or col >= len(board[0]): # check row,col in bound of board
                 return False
-            # cannot find the match
-            if board[row][col] != word[idx]:
-                return False
-            # mark searched
+            elif board[row][col] != word[widx]: 
+                return False            
+            
             board[row][col] = '#'
-            for r, c in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-                if dfs(row + r, col + c, word, idx + 1):
+
+            for d in [[0,1],[0,-1],[1,0],[-1,0]]:
+                if dfs(row + d[0],col + d[1], widx + 1):
                     return True
-            # revert the searched mark
-            board[row][col] = word[idx]
+            board[row][col] = word[widx]
+            
             return False
 
         for i in range(len(board)):
             for j in range(len(board[i])):
-                if dfs(i, j, word, 0):
+                if dfs(i, j, 0):
                     return True
         return False
 
 
 if __name__ == '__main__':
     board = [
+        ["A","A","A","A","A","A"],
+        ["A","A","A","A","A","A"],
+        ["A","A","A","A","A","A"],
+        ["A","A","A","A","A","A"],
+        ["A","A","A","A","A","A"],
+        ["A","A","A","A","A","A"]
+    ]
+    assert Solution().exist(deepcopy(board), "AAAAAAAAAAAABAA") == False
+
+    board = [
+        ["C","A","A"],
+        ["A","A","A"],
+        ["B","C","D"]
+    ]
+    
+    assert Solution().exist(deepcopy(board), "AAB") == True
+
+    board = [
+        ['a']
+    ]
+    assert Solution().exist(deepcopy(board), "a") == True
+
+    board = [
         ['A', 'B', 'C', 'E'],
         ['S', 'F', 'C', 'S'],
         ['A', 'D', 'E', 'E']
     ]
-    from copy import deepcopy
     assert Solution().exist(deepcopy(board), "ABCCED") == True
     assert Solution().exist(deepcopy(board), "SEE") == True
     assert Solution().exist(deepcopy(board), "ABCB") == False
