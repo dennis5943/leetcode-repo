@@ -18,9 +18,13 @@ Output: 10
 
 
 """
+from collections import Counter
 from typing import List
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
+        #hashCnt = Counter(heights)
+        #minHiehgt = min(hashCnt.keys())
+
         heights.append(0)
         stack = [-1]
         res = 0
@@ -31,11 +35,12 @@ class Solution:
                 width = i - stack[-1] - 1
                 res = max(res, (height * width))
             stack.append(i)
-        # heights.pop()
         return res
 
 
 if __name__ == '__main__':
+    assert Solution().largestRectangleArea([2,1,2,1,2,1,6,6,1,3,1]) == 12
+    assert Solution().largestRectangleArea([2,1,2]) == 3
     assert Solution().largestRectangleArea([9,0]) == 9
     assert Solution().largestRectangleArea([4,2]) == 4
     assert Solution().largestRectangleArea([2,1,5,6,2,3]) == 10
