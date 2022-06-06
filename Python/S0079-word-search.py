@@ -34,7 +34,7 @@ class Solution:
             # no character to find            
             if widx >= len(word): # check widx in bound of word
                 return True
-            elif row < 0 or row >= len(board) or col < 0 or col >= len(board[0]): # check row,col in bound of board
+            elif row < 0 or row >= len(board) or col < 0 or col == len(board[0]): # check row,col in bound of board
                 return False
             elif board[row][col] != word[widx]: 
                 return False            
