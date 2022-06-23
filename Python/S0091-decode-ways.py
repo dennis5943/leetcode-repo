@@ -26,25 +26,34 @@ class Solution:
         if lst[0] == 0:
             return 0
 
+        tmp = {}
         def dfs(p,i):
             v = p * 10 + lst[i] if p!=-1 else lst[i]
-
-            if i < len(lst) -1:
-                if p in [1,2]:
-                    return dfs(-1,i+1)
+            
+            if "{}_{}".format(p,i) in tmp:
+                return tmp["{}_{}".format(p,i)]
+            elif i < len(lst) -1:
+                if p in [1,2] and (1<=v<=26):
+                    tmp["{}_{}".format(p,i)] = dfs(-1,i+1)
+                    return tmp["{}_{}".format(p,i)]
                 elif p == -1 and (1<=v<=26):
-                    return dfs(lst[i],i+1) + dfs(-1,i+1)                
+                    tmp["{}_{}".format(p,i)] = dfs(lst[i],i+1) + dfs(-1,i+1)      
+                    return tmp["{}_{}".format(p,i)]
                 else:
+                    tmp["{}_{}".format(p,i)] = 0
                     return 0
             elif i == len(lst) - 1 and (1<=v<=26):
+                tmp["{}_{}".format(p,i)] = 1
                 return 1
             else:
+                tmp["{}_{}".format(p,i)] = 0
                 return 0
         return dfs(-1,0)
 
 
 if __name__ == '__main__':
-    assert Solution().numDecodings("111111111111111111111111111111111111111111111") == 1
+    assert Solution().numDecodings("2839") == 1
+    assert Solution().numDecodings("111111111111111111111111111111111111111111111") == 1836311903
     assert Solution().numDecodings('2101') == 1
     assert Solution().numDecodings('10') == 1
     assert Solution().numDecodings('06') == 0
