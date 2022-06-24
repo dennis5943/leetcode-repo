@@ -25,9 +25,20 @@ class TreeNode:
 
 from typing import List
 class Solution:
-    def inorderTraversal(self, root: TreeNode) -> List[int]:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        lst = []
         
-        pass
+        def inorder(n):
+            if not n:
+                return None
+            
+            inorder(n.left)
+            lst.append(n.val)
+            inorder(n.right)
+            pass
+        
+        inorder(root)
+        return lst
 
 
 if __name__ == '__main__':
