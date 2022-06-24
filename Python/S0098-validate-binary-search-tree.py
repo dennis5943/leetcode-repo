@@ -32,6 +32,9 @@ Explanation: The root node's value is 5 but its right child's value is 4.
 """
 
 # Definition for a binary tree node.
+from pickle import LIST
+
+
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -41,9 +44,36 @@ class TreeNode:
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
         
-        pass
+        def dfsCheck(curNode,minv,maxv):
+            if curNode == None:
+                return True
+            elif minv < curNode.val < maxv:
+                return dfsCheck(curNode.left,minv,min(curNode.val,maxv)) and dfsCheck(curNode.right,max(curNode.val,minv),maxv)
+            else:
+                return False
+        
+        return dfsCheck(root,-(2**31)-1 , 2**31 )
 
+def lst2tree(list: LIST) -> TreeNode:
+
+    r = TreeNode(val = list[0])
+
+    def dfs(node,idx):
+        leftIdx = (idx + 1) * 2 - 1
+        rightIdx = (idx + 1) * 2
+
+        if leftIdx < len(list) and list[leftIdx]:
+            node.left = TreeNode(val = list[leftIdx])
+            dfs(node.left,leftIdx)
+        
+        if rightIdx < len(list) and list[rightIdx]:
+            node.right = TreeNode(val = list[rightIdx])
+            dfs(node.right,rightIdx)
+    dfs(r,0)
+    return r
 
 if __name__ == '__main__':
-    assert Solution().isValidBST(0) == 0
+    assert Solution().isValidBST(lst2tree([5,4,6,None,None,3,7])) == False
+    assert Solution().isValidBST(lst2tree([2147483647])) == True
+    assert Solution().isValidBST(lst2tree([5,1,4,None,None,3,6])) == False
 
