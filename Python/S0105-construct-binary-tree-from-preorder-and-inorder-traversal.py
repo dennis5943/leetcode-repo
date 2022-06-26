@@ -29,21 +29,17 @@ class TreeNode:
 from typing import List
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-        def dfs(pstart,pend,istart,iend):
-            if not (0<=pstart<=len(preorder) and pstart <= pend):
+        def dfs(stopVal):
+            if not inorder or inorder[0] == stopVal:
                 return None
-            
-            r = TreeNode(preorder[pstart])
-            for posi in range(istart,iend + 1):
-                if r.val == inorder[posi]:
-                    lsize = posi - istart
-                    rsize = iend - posi
-                    r.left = dfs(pstart + 1,pstart + lsize ,istart,posi - 1)
-                    r.right = dfs(pend-rsize+1,pend,posi + 1,iend)
-                    break
-            return r
 
-        r = dfs(0,len(preorder) - 1,0,len(preorder) - 1)
+            root = TreeNode(preorder.pop(0))
+            root.left = dfs(root.val)
+            inorder.pop(0)
+            root.right = dfs(stopVal)
+            return root
+
+        r = dfs(None)
         return r
 
 def vaildation(root: TreeNode,preorder: List[int],inorder: List[int]) -> bool:
@@ -65,17 +61,17 @@ def vaildation(root: TreeNode,preorder: List[int],inorder: List[int]) -> bool:
 
 if __name__ == '__main__':
     preorder,inorder = [1,2,4,7,3,5,6],[2,7,4,1,5,3,6]
-    assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
+    assert vaildation(Solution().buildTree(preorder.copy(),inorder.copy()),preorder,inorder)
     
     preorder,inorder = [1,2,3],[2,3,1]
-    assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
+    assert vaildation(Solution().buildTree(preorder.copy(),inorder.copy()),preorder,inorder)
 
     preorder,inorder = [1,2],[1,2]
-    assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
+    assert vaildation(Solution().buildTree(preorder.copy(),inorder.copy()),preorder,inorder)
 
     preorder,inorder = [3,9,20,15,7],[9,3,15,20,7]
-    assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
+    assert vaildation(Solution().buildTree(preorder.copy(),inorder.copy()),preorder,inorder)
 
     preorder,inorder = [-1],[-1]
-    assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
+    assert vaildation(Solution().buildTree(preorder.copy(),inorder.copy()),preorder,inorder)
     
