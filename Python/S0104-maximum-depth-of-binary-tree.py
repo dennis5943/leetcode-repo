@@ -28,9 +28,13 @@ class TreeNode:
 
 class Solution:
     def maxDepth(self, root: TreeNode) -> int:
+        def dfs(node):
+            if not node:
+                return 0
+            else:
+                return 1 + max(dfs(node.left),dfs(node.right))
         
-        pass
-
+        return dfs(root)
 
 if __name__ == '__main__':
     assert Solution().maxDepth(0) == 0
