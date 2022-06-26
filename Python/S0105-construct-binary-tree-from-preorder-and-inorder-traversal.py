@@ -29,21 +29,21 @@ class TreeNode:
 from typing import List
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-        def dfs(node,pidx,iidx):
-            if pidx == len(preorder):
-                return None,pidx,iidx
-            curNode = TreeNode(preorder[pidx])
-            if not node:
-                node = curNode
+        def dfs(pstart,pend,istart,iend):
+            if not (0<=pstart<=len(preorder) and pstart <= pend):
+                return None
+            
+            r = TreeNode(preorder[pstart])
+            for posi in range(istart,iend + 1):
+                if r.val == inorder[posi]:
+                    lsize = posi - istart
+                    rsize = iend - posi
+                    r.left = dfs(pstart + 1,pstart + lsize ,istart,posi - 1)
+                    r.right = dfs(pend-rsize+1,pend,posi + 1,iend)
+                    break
+            return r
 
-            if iidx < len(inorder) and preorder[pidx] == inorder[iidx]:
-                node.right,pidx,iidx = dfs(curNode,pidx + 1,iidx + 2)
-            else:
-                curNode.left,pidx,iidx = dfs(curNode,pidx + 1,iidx)
-
-            return curNode,pidx,iidx
-
-        r = dfs(None,0,0)[0]
+        r = dfs(0,len(preorder) - 1,0,len(preorder) - 1)
         return r
 
 def vaildation(root: TreeNode,preorder: List[int],inorder: List[int]) -> bool:
@@ -64,8 +64,11 @@ def vaildation(root: TreeNode,preorder: List[int],inorder: List[int]) -> bool:
     return treePreorder == preorder and treeInorder == inorder
 
 if __name__ == '__main__':
+    preorder,inorder = [1,2,4,7,3,5,6],[2,7,4,1,5,3,6]
+    assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
+    
     preorder,inorder = [1,2,3],[2,3,1]
-    #assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
+    assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
 
     preorder,inorder = [1,2],[1,2]
     assert vaildation(Solution().buildTree(preorder,inorder),preorder,inorder)
