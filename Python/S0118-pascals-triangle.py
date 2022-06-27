@@ -32,7 +32,6 @@ class Solution:
                 res.append(nums)
 
             dfs(lv + 1,numRows)
-            pass
 
         dfs(0,numRows)
         return res
