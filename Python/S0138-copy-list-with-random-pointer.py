@@ -42,10 +42,35 @@ class Node:
         self.random = random
 """
 
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+from typing import Optional
 class Solution:
-    def copyRandomList(self, head: 'Node') -> 'Node':
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
-        pass
+        def copyList(node):
+            if not node:
+                return None
+            
+            nxt = node.next
+            clone = Node(node.val,random = node.random)
+            node.next = clone
+            clone.next = copyList(nxt)
+            return clone
+        
+        copyHead = copyList(head)
+        
+        tmpN = copyHead
+        while tmpN:
+            if tmpN.random:
+                tmpN.random = tmpN.random.next
+            tmpN = tmpN.next
+        
+        return copyHead
 
 
 if __name__ == '__main__':
